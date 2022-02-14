@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import asyncio
-import tempfile
 import tkinter as tk
 from tkinter import ttk
 import cut_copy_paste as ccp
