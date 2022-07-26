@@ -12,15 +12,32 @@ hello, <emphasis level="strong">Hello motherfucker</emphasis> <break strength="w
 
 </speak>'''
 
+names = {}
+
+async def retVoiceList():
+    return await edge_tts.list_voices()
+
+for voice in asyncio.run(retVoiceList()):
+    print(voice)
+    name = voice["Name"]
+    fname = voice["FriendlyName"]
+
+    names[fname] = name
+
+    print(names)
+
 
 async def Speak(filename, text):
     l2.configure(text=f"Started")
     print(ssml.get())
 
 
-    for voice in await edge_tts.list_voices():
-       #print(voice)
-        pass
+
+
+
+
+
+
     """
     Main function
     """
@@ -29,8 +46,11 @@ async def Speak(filename, text):
         length = len(text)
         f = 0
 
+        vci = names[v.get()]
+
+        print(vci)
         try:
-            async for i in communicate.run(text, voice="Microsoft Server Speech Text to Speech Voice (en-US, GuyNeural)",  customspeak=ssml.get()):
+            async for i in communicate.run(text, voice=vci,  customspeak=ssml.get()):
                 print(f"{f}")
                 l2.configure(text=f"Saved as {filename}")
 
@@ -91,6 +111,12 @@ filename = tk.StringVar()
 e1 = ttk.Entry(filename_frame, textvariable=filename)
 e1.grid(row=2, column=1, sticky=tk.E)
 e1.insert(0, e1text)
+
+v = tk.StringVar(filename_frame)
+v.set(list(names.keys())[0]) # default value
+
+w = tk.OptionMenu(filename_frame,v , *list(names.keys()))
+w.grid(row=2, column=2)
 
 b1text = tk.StringVar(value="save")
 text = tk.StringVar()
